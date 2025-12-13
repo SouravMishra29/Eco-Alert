@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoAlert - Waste Management Community Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #10b981;
+            --secondary-color: #0891b2;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* ============ NAVBAR ============ */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #0e7490;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* ============ SECTIONS VISIBILITY ============ */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============ HOME PAGE ============ */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-buttons .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+        }
+
+        /* ============ AUTH FORMS ============ */
+        .form-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .form-submit:hover {
+            background: #059669;
+        }
+
+        .form-switch {
+            text-align: center;
+            color: var(--text-light);
+            margin-top: 1rem;
+        }
+
+        .form-switch a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-info {
+            background: #cffafe;
+            color: #164e63;
+            border: 1px solid #a5f3fc;
+        }
+
+        /* ============ DASHBOARD ============ */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* ============ NEWS SECTION ============ */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .news-card-content {
+            padding: 1.5rem;
+        }
+
+        .news-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .news-card p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .severity-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .severity-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .severity-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* ============ REVIEWS SECTION ============ */
+        .reviews-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .review-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .review-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .review-author {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .review-time {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .review-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            max-height: 300px;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .review-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .review-action-btn:hover {
+            color: var(--primary-color);
+        }
+
+        /* ============ LEADERBOARD ============ */
+        .leaderboard-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 50px 1fr 150px;
+            gap: 1rem;
+            font-weight: 600;
+        }
+
+        .leaderboard-row {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 50px 1fr 150px;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .leaderboard-row:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .medal-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* ============ ABOUT & CONTACT ============ */
+        .about-container,
+        .contact-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .about-container h2,
+        .contact-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .about-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .about-section p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* ============ LOADING & SPINNER ============ */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .spinner {
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .form-container {
+                margin: 1rem;
+            }
+
+            .navbar-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .leaderboard-header,
+            .leaderboard-row {
+                grid-template-columns: 40px 1fr 100px;
+            }
+        }
+
+        /* ============ FILE INPUT STYLING ============ */
+        .file-input-label {
+            display: inline-block;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #059669;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ============ MODAL ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-light);
+            border: none;
+            background: none;
+        }
+
+        .modal-close:hover {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- ============ NAVBAR ============ -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#home" class="logo" onclick="showSection('home')">
+                ♻️ EcoAlert
+            </a>
+            <ul class="nav-links">
+                <li><a onclick="showSection('home')">Home</a></li>
+                <li><a onclick="showSection('news')">News</a></li>
+                <li id="authNavLink" style="display: none;">
+                    <a onclick="showSection('dashboard')">Dashboard</a>
+                </li>
+                <li><a onclick="showSection('about')">About</a></li>
+                <li><a onclick="showSection('contact')">Contact</a></li>
+                <li id="userProfile" style="display: none;">
+                    <span id="userName" style="margin-right: 1rem;"></span>
+                    <button class="btn btn-outline" onclick="logout()" style="padding: 0.5rem 1rem;">Logout</button>
+                </li>
+                <li id="authButtons">
+                    <button class="btn btn-primary" onclick="showSection('login')" style="margin-right: 0.5rem;">Login</button>
+                    <button class="btn btn-secondary" onclick="showSection('signup')">Sign Up</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============ HOME SECTION ============ -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>🌍 Waste Management Community Platform</h1>
+                <p>Join our mission to combat non-biodegradable waste and pollution</p>
+                <p style="font-size: 1rem; opacity: 0.9;">Report waste issues, learn about pollution in your area, and connect with your community</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showSection('login')">Get Started</button>
+                    <button class="btn" style="background: white; color: var(--primary-color);" onclick="document.querySelector('.features').scrollIntoView({behavior: 'smooth'})">Learn More</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Report Waste</h3>
+                <p>Share photos and details about waste and pollution in your area</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-Powered News</h3>
+                <p>Get personalized pollution and waste management news using Google Gemini AI</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Community Hub</h3>
+                <p>Connect with others, review issues, and celebrate contributions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Track Progress</h3>
+                <p>Monitor pollution trends and waste management improvements in your city</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Earn Badges</h3>
+                <p>Climb the leaderboard and earn recognition for your environmental efforts</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Location-Based</h3>
+                <p>Get insights specific to your state and city pollution levels</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ LOGIN SECTION ============ -->
+    <section id="login" class="section">
+        <div class="form-container">
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">Login to EcoAlert</h2>
+            <div id="loginAlert"></div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="form-submit">Login</button>
+                <div class="form-switch">
+                    Don't have an account? <a onclick="showSection('signup')">Sign up here</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ============ SIGNUP SECTION ============ -->
+    <section id="signup" class="section">
+        <div class="form-container">
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">Join EcoAlert Community</h2>
+            <div id="signupAlert"></div>
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="signupEmail" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>State</label>
+                    <select id="signupState" required onchange="updateCities()">
+                        <option value="">Select State</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Telangana">Telangana</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <select id="signupCity" required>
+                        <option value="">Select City</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" required placeholder="At least 6 characters">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" required placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="form-submit">Sign Up</button>
+                <div class="form-switch">
+                    Already have an account? <a onclick="showSection('login')">Login here</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ============ DASHBOARD SECTION ============ -->
+    <section id="dashboard" class="section">
+        <div class="dashboard-container">
+            <h2 style="color: var(--primary-color); margin-bottom: 2rem;">Community Dashboard</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Reports</h3>
+                    <div class="value" id="totalReports">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Users</h3>
+                    <div class="value" id="activeUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>High Severity Issues</h3>
+                    <div class="value" id="highSeverity">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Your Contributions</h3>
+                    <div class="value" id="userContributions">0</div>
+                </div>
+            </div>
+
+            <!-- Tabs for navigation -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); flex-wrap: wrap;">
+                <button class="tab-btn" onclick="switchTab('post-review')" style="background: none; border: none; cursor: pointer; padding: 1rem; color: var(--text-light); font-weight: 600; border-bottom: 3px solid transparent; transition: all 0.3s;">
+                    📝 Post Review
+                </button>
+                <button class="tab-btn" onclick="switchTab('community-reviews')" style="background: none; border: none; cursor: pointer; padding: 1rem; color: var(--text-light); font-weight: 600; border-bottom: 3px solid transparent; transition: all 0.3s;">
+                    👥 Community Reviews
+                </button>
+                <button class="tab-btn" onclick="switchTab('leaderboard')" style="background: none; border: none; cursor: pointer; padding: 1rem; color: var(--text-light); font-weight: 600; border-bottom: 3px solid transparent; transition: all 0.3s;">
+                    🏆 Leaderboard
+                </button>
+            </div>
+
+            <!-- Post Review Tab -->
+            <div id="tab-post-review" class="tab-content" style="display: none;">
+                <div class="reviews-container">
+                    <div class="review-form">
+                        <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">Report Waste or Pollution Issue</h3>
+                        <form onsubmit="handlePostReview(event)" id="reviewForm">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="reviewTitle" required placeholder="e.g., Large plastic dump near park">
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="reviewDescription" required placeholder="Describe the waste/pollution issue in detail..." rows="5"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Waste Type</label>
+                                <select id="wasteType" required>
+                                    <option value="">Select waste type</option>
+                                    <option value="plastic">Plastic Waste</option>
+                                    <option value="electronic">Electronic Waste</option>
+                                    <option value="industrial">Industrial Waste</option>
+                                    <option value="organic">Organic Waste</option>
+                                    <option value="hazardous">Hazardous Waste</option>
+                                    <option value="medical">Medical Waste</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Severity Level</label>
+                                <select id="severity">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Upload Image (Optional)</label>
+                                <label class="file-input-label">
+                                    Choose Image
+                                    <input type="file" id="reviewImage" accept="image/*" onchange="updateFileName()">
+                                </label>
+                                <div class="file-name" id="fileName"></div>
+                            </div>
+                            <button type="submit" class="form-submit">Submit Report</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Reviews Tab -->
+            <div id="tab-community-reviews" class="tab-content" style="display: none;">
+                <div class="reviews-container">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">Community Reports in Your City</h3>
+                    <div id="reviewsList"></div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Tab -->
+            <div id="tab-leaderboard" class="tab-content" style="display: none;">
+                <div class="leaderboard-container">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">Top Contributors in Your City</h3>
+                    <div class="leaderboard-table">
+                        <div class="leaderboard-header">
+                            <div>Rank</div>
+                            <div>Name</div>
+                            <div>Contributions</div>
+                        </div>
+                        <div id="leaderboardList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ NEWS SECTION ============ -->
+    <section id="news" class="section">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+            <h2 style="color: var(--primary-color); margin-bottom: 2rem;">🤖 AI-Powered News & Updates</h2>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">Get the latest pollution and waste management news for your area powered by Google Gemini AI</p>
+            <div id="newsContainer" class="news-grid"></div>
+        </div>
+    </section>
+
+    <!-- ============ ABOUT SECTION ============ -->
+    <section id="about" class="section">
+        <div class="about-container">
+            <h2>About EcoAlert</h2>
+            
+            <div class="about-section">
+                <h3>🌍 Our Mission</h3>
+                <p>EcoAlert is dedicated to combating non-biodegradable waste and pollution through community engagement and AI-powered awareness. We believe that informed communities can drive real environmental change.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>💡 What We Do</h3>
+                <p><strong>Report Issues:</strong> Citizens can report waste and pollution directly from the platform with photos and descriptions.</p>
+                <p><strong>AI News:</strong> Using Google Gemini AI, we provide personalized pollution news relevant to your city.</p>
+                <p><strong>Community Engagement:</strong> Connect with others, review reports, and collaborate on solutions.</p>
+                <p><strong>Track Progress:</strong> Monitor waste management improvements and pollution trends in real-time.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>🎯 Key Features</h3>
+                <ul style="color: var(--text-light);">
+                    <li>Location-based pollution information</li>
+                    <li>AI-powered environmental news (powered by Google Gemini)</li>
+                    <li>Community waste reporting system</li>
+                    <li>Real-time statistics and analytics</li>
+                    <li>Gamified leaderboards and badges</li>
+                    <li>Educational resources on waste management</li>
+                </ul>
+            </div>
+
+            <div class="about-section">
+                <h3>🤝 Get Involved</h3>
+                <p>Every report counts. Join thousands of environmental advocates reporting waste issues and raising awareness about pollution in your area. Together, we can create a cleaner, healthier planet.</p>
+            </div>
+
+            <div class="about-section">
+                <h3>🔧 Technology Stack</h3>
+                <p><strong>Frontend:</strong> HTML5, CSS3, Vanilla JavaScript</p>
+                <p><strong>Backend:</strong> Node.js, Express.js</p>
+                <p><strong>Database:</strong> MySQL</p>
+                <p><strong>AI:</strong> Google Gemini API</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CONTACT SECTION ============ -->
+    <section id="contact" class="section">
+        <div class="contact-container">
+            <h2>Get In Touch</h2>
+            
+            <div class="about-section">
+                <h3>📧 Contact Us</h3>
+                <p><strong>Email:</strong> info@ecoalert.com</p>
+                <p><strong>Phone:</strong> +91-XXXX-XXXX-XXXX</p>
+            </div>
+
+            <div class="about-section">
+                <h3>📍 Headquarters</h3>
+                <p>EcoAlert Community</p>
+                <p>Environmental Awareness Division</p>
+                <p>India</p>
+            </div>
+
+            <div class="about-section">
+                <h3>🤝 Partnership & Support</h3>
+                <p>Interested in partnering with us or becoming a contributor? Reach out to us at <strong>partnerships@ecoalert.com</strong></p>
+            </div>
+
+            <div class="about-section" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+                <h3 style="color: white;">Stay Updated</h3>
+                <p>Subscribe to our newsletter to get weekly updates on pollution trends and community achievements in your area.</p>
+                <form style="margin-top: 1rem;" onsubmit="handleNewsletter(event)">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="email" placeholder="Your email" required style="flex: 1; padding: 0.75rem; border: none; border-radius: 0.5rem;">
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ============ API CONFIGURATION ============
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let currentUser = null;
+        let userToken = null;
+
+        // ============ STATE & CITY DATA ============
+        const citiesByState = {
+            'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Aurangabad'],
+            'Karnataka': ['Bangalore', 'Pune', 'Mysore', 'Belgaum'],
+            'Delhi': ['New Delhi', 'Delhi'],
+            'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Salem'],
+            'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Varanasi', 'Agra'],
+            'Punjab': ['Chandigarh', 'Ludhiana', 'Amritsar'],
+            'West Bengal': ['Kolkata', 'Asansol', 'Siliguri'],
+            'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara'],
+            'Rajasthan': ['Jaipur', 'Jodhpur', 'Udaipur'],
+            'Telangana': ['Hyderabad', 'Warangal']
+        };
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadNews();
+        });
+
+        // ============ SECTION NAVIGATION ============
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+
+                // Load data based on section
+                if (sectionId === 'dashboard') {
+                    loadDashboard();
+                } else if (sectionId === 'news') {
+                    loadNews();
+                }
+
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.style.borderBottomColor = 'transparent';
+                btn.style.color = 'var(--text-light)';
+            });
+
+            // Show selected tab
+            const tab = document.getElementById(`tab-${tabName}`);
+            if (tab) {
+                tab.style.display = 'block';
+                event.target.style.borderBottomColor = 'var(--primary-color)';
+                event.target.style.color = 'var(--primary-color)';
+
+                if (tabName === 'community-reviews') {
+                    loadReviews();
+                } else if (tabName === 'leaderboard') {
+                    loadLeaderboard();
+                }
+            }
+        }
+
+        // ============ AUTHENTICATION ============
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (token && user) {
+                currentUser = JSON.parse(user);
+                userToken = token;
+                updateAuthUI();
+            }
+        }
+
+        function updateAuthUI() {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('authNavLink').style.display = 'block';
+            document.getElementById('userProfile').style.display = 'flex';
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name}`;
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('signupAlert');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: document.getElementById('signupName').value,
+                        email: document.getElementById('signupEmail').value,
+                        password: document.getElementById('signupPassword').value,
+                        confirmPassword: document.getElementById('signupConfirmPassword').value,
+                        state: document.getElementById('signupState').value,
+                        city: document.getElementById('signupCity').value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert(alertBox, 'Registration successful! Please login.', 'success');
+                    setTimeout(() => {
+                        document.getElementById('signupForm')?.reset?.();
+                        showSection('login');
+                    }, 1500);
+                } else {
+                    showAlert(alertBox, data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showAlert(alertBox, 'Error during signup. Please try again.', 'error');
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('loginAlert');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    currentUser = data.user;
+                    userToken = data.token;
+                    updateAuthUI();
+                    showAlert(alertBox, 'Login successful!', 'success');
+                    setTimeout(() => {
+                        showSection('dashboard');
+                    }, 1000);
+                } else {
+                    showAlert(alertBox, data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert(alertBox, 'Error during login. Please try again.', 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            currentUser = null;
+            userToken = null;
+            document.getElementById('authButtons').style.display = 'flex';
+            document.getElementById('authNavLink').style.display = 'none';
+            document.getElementById('userProfile').style.display = 'none';
+            showSection('home');
+        }
+
+        // ============ DASHBOARD ============
+        async function loadDashboard() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/stats/${currentUser.city}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('totalReports').textContent = data.stats.total_reports;
+                    document.getElementById('activeUsers').textContent = data.stats.active_users;
+                    document.getElementById('highSeverity').textContent = data.stats.high_severity_reports;
+                    document.getElementById('userContributions').textContent = data.stats.plastic_reports || '0';
+                }
+
+                // Show first tab
+                switchTab('post-review');
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+            }
+        }
+
+        async function handlePostReview(event) {
+            event.preventDefault();
+
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('title', document.getElementById('reviewTitle').value);
+                formData.append('description', document.getElementById('reviewDescription').value);
+                formData.append('wasteType', document.getElementById('wasteType').value);
+                formData.append('severity', document.getElementById('severity').value);
+
+                const imageFile = document.getElementById('reviewImage').files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
+
+                const response = await fetch(`${API_BASE_URL}/reviews`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${userToken}` },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Review posted successfully!');
+                    document.getElementById('reviewForm').reset();
+                    document.getElementById('fileName').textContent = '';
+                    loadReviews();
+                } else {
+                    alert(data.message || 'Error posting review');
+                }
+            } catch (error) {
+                console.error('Post review error:', error);
+                alert('Error posting review');
+            }
+        }
+
+        async function loadReviews() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/reviews/${currentUser.city}`);
+                const data = await response.json();
+
+                const reviewsList = document.getElementById('reviewsList');
+                reviewsList.innerHTML = '';
+
+                if (data.reviews.length === 0) {
+                    reviewsList.innerHTML = '<p style="color: var(--text-light);">No reviews yet. Be the first to report!</p>';
+                    return;
+                }
+
+                data.reviews.forEach(review => {
+                    const reviewCard = document.createElement('div');
+                    reviewCard.className = 'review-card';
+                    reviewCard.innerHTML = `
+                        <div class="review-header">
+                            <div>
+                                <div class="review-author">${review.name}</div>
+                                <div class="review-time">${new Date(review.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <span class="severity-badge severity-${review.severity}">${review.severity.toUpperCase()}</span>
+                        </div>
+                        <h3>${review.title}</h3>
+                        <p>${review.description}</p>
+                        ${review.image_path ? `<img src="${review.image_path}" alt="Review image" class="review-image">` : ''}
+                        <p style="color: var(--primary-color); font-weight: 600; margin-top: 0.5rem;">Type: ${review.waste_type}</p>
+                        <div class="review-actions">
+                            <button class="review-action-btn" onclick="likeReview(${review.id})">
+                                👍 ${review.likes || 0} Likes
+                            </button>
+                            <button class="review-action-btn" onclick="alert('Comments coming soon!')">
+                                💬 Comments
+                            </button>
+                        </div>
+                    `;
+                    reviewsList.appendChild(reviewCard);
+                });
+            } catch (error) {
+                console.error('Load reviews error:', error);
+            }
+        }
+
+        async function likeReview(reviewId) {
+            if (!currentUser) {
+                alert('Please login first');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/reviews/${reviewId}/like`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadReviews();
+                }
+            } catch (error) {
+                console.error('Like error:', error);
+            }
+        }
+
+        async function loadLeaderboard() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/leaderboard/${currentUser.city}`);
+                const data = await response.json();
+
+                const leaderboardList = document.getElementById('leaderboardList');
+                leaderboardList.innerHTML = '';
+
+                const medals = ['🥇', '🥈', '🥉'];
+
+                data.leaderboard.forEach((user, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'leaderboard-row';
+                    row.innerHTML = `
+                        <div class="rank">
+                            <span class="medal-icon">${medals[index] || index + 1}</span>
+                        </div>
+                        <div>${user.name}</div>
+                        <div>${user.contribution_count} Reports</div>
+                    `;
+                    leaderboardList.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Leaderboard error:', error);
+            }
+        }
+
+        // ============ NEWS ============
+        async function loadNews() {
+            const defaultCity = currentUser?.city || 'Mumbai';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/news/${defaultCity}`);
+                const data = await response.json();
+
+                const newsContainer = document.getElementById('newsContainer');
+                newsContainer.innerHTML = '';
+
+                if (data.news && data.news.length > 0) {
+                    data.news.forEach(item => {
+                        const newsContent = typeof item.content === 'string' ? JSON.parse(item.content) : item;
+                        const newsCard = document.createElement('div');
+                        newsCard.className = 'news-card';
+                        newsCard.innerHTML = `
+                            <div class="news-card-content">
+                                <h3>${newsContent.title || 'Waste Management Update'}</h3>
+                                <p>${(newsContent.description || newsContent.info || '').substring(0, 150)}...</p>
+                                <span class="severity-badge severity-${newsContent.severity || 'medium'}">
+                                    ${(newsContent.severity || 'medium').toUpperCase()}
+                                </span>
+                            </div>
+                        `;
+                        newsContainer.appendChild(newsCard);
+                    });
+                } else {
+                    newsContainer.innerHTML = '<p style="color: var(--text-light); grid-column: 1/-1;">Loading news...</p>';
+                }
+            } catch (error) {
+                console.error('News load error:', error);
+                document.getElementById('newsContainer').innerHTML = '<p style="color: var(--text-light); grid-column: 1/-1;">Error loading news. Please try again.</p>';
+            }
+        }
+
+        // ============ UTILITIES ============
+        function updateCities() {
+            const state = document.getElementById('signupState').value;
+            const citySelect = document.getElementById('signupCity');
+            citySelect.innerHTML = '<option value="">Select City</option>';
+
+            if (state && citiesByState[state]) {
+                citiesByState[state].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        function updateFileName() {
+            const file = document.getElementById('reviewImage').files[0];
+            const fileNameDiv = document.getElementById('fileName');
+            if (file) {
+                fileNameDiv.textContent = `Selected: ${file.name}`;
+            } else {
+                fileNameDiv.textContent = '';
+            }
+        }
+
+        function showAlert(element, message, type) {
+            element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 5000);
+        }
+
+        function handleNewsletter(event) {
+            event.preventDefault();
+            alert('Thank you for subscribing! Check your email for confirmation.');
+            event.target.reset();
+        }
+
+        // Demo mode - simulate offline
+        if (!navigator.onLine) {
+            document.body.style.opacity = '0.8';
+            const offlineNotice = document.createElement('div');
+            offlineNotice.style.cssText = 'position: fixed; top: 0; width: 100%; background: #fbbf24; color: #78350f; padding: 1rem; text-align: center; z-index: 3000;';
+            offlineNotice.textContent = 'You are offline. Some features may not work.';
+            document.body.prepend(offlineNotice);
+        }
+    </script>
+</body>
+</html>
